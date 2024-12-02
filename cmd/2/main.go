@@ -22,6 +22,7 @@ func main() {
 		}
 		dir := 0
 		isSafeStrict := true
+		isSafe := true
 		for _, numberByte := range numberBytes[1:] {
 			number, err := strconv.Atoi(string(numberByte))
 			if err != nil {
@@ -37,16 +38,27 @@ func main() {
 			}
 
 			if !(utils.Abs(delta) >= 1 && utils.Abs(delta) <= 3) {
-				isSafeStrict = false
-				break
+				if isSafeStrict {
+					isSafeStrict = false
+					continue
+				} else {
+					isSafe = false
+					break
+				}
 			}
 
 			if dir == 0 {
 				dir = currentDir
 			} else if currentDir != dir {
-				isSafeStrict = false
-				break
+				if isSafeStrict {
+					isSafeStrict = false
+					continue
+				} else {
+					isSafe = false
+					break
+				}
 			}
+
 			previousNumber = number
 		}
 
@@ -54,6 +66,9 @@ func main() {
 			resultOne++
 		}
 
+		if isSafe {
+			resultTwo++
+		}
 	}
 
 	log.Println("Result 1:", resultOne)
