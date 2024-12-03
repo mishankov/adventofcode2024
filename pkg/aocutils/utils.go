@@ -26,7 +26,7 @@ func SplitByteLines(data []byte) [][]byte {
 	lines := bytes.Split(data, []byte{13, 10})
 
 	if len(lines) == 1 {
-		lines = bytes.Split(data, []byte{13})
+		lines = bytes.Split(data, []byte{10})
 	}
 
 	return lines
