@@ -7,9 +7,8 @@ import (
 	"slices"
 )
 
-func main() {
-	bytesData := aocutils.GetFileBytes("data/1")
-	byteLines := bytes.Split(bytesData, []byte{13, 10})
+func solve(data []byte) (int, int) {
+	byteLines := bytes.Split(data, []byte{13, 10})
 
 	left := make([]int, len(byteLines))
 	right := make([]int, len(byteLines))
@@ -33,6 +32,13 @@ func main() {
 		resultOne += aocutils.Abs(left[i] - right[i])
 		resultTwo += left[i] * rightAmounts[left[i]]
 	}
+
+	return resultOne, resultTwo
+}
+
+func main() {
+	bytesData := aocutils.GetFileBytes("data/1")
+	resultOne, resultTwo := solve(bytesData)
 
 	log.Println("Result 1:", resultOne)
 	log.Println("Result 2:", resultTwo)

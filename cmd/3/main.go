@@ -7,9 +7,8 @@ import (
 	"strings"
 )
 
-func main() {
-	bytesData := aocutils.GetFileBytes("data/3")
-	stringData := string(bytesData)
+func solve(data []byte) (int, int) {
+	stringData := string(data)
 
 	re := regexp.MustCompile(`mul\(\d+,\d+\)|do\(\)|don't\(\)`)
 
@@ -39,6 +38,13 @@ func main() {
 		}
 
 	}
+
+	return resultOne, resultTwo
+}
+
+func main() {
+	bytesData := aocutils.GetFileBytes("data/3")
+	resultOne, resultTwo := solve(bytesData)
 
 	log.Println("Result 1:", resultOne)
 	log.Println("Result 2:", resultTwo)
