@@ -1,6 +1,7 @@
 package aocutils
 
 import (
+	"bytes"
 	"io"
 	"log"
 	"os"
@@ -13,12 +14,22 @@ func GetFileBytes(path string) []byte {
 		log.Fatal("Error opening file:", err)
 	}
 
-	bytesData, err := io.ReadAll(file)
+	data, err := io.ReadAll(file)
 	if err != nil {
 		log.Fatal("Error reading file content:", err)
 	}
 
-	return bytesData
+	return data
+}
+
+func SplitByteLines(data []byte) [][]byte {
+	lines := bytes.Split(data, []byte{13, 10})
+
+	if len(lines) == 1 {
+		lines = bytes.Split(data, []byte{13})
+	}
+
+	return lines
 }
 
 type absInput interface {

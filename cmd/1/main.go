@@ -8,7 +8,7 @@ import (
 )
 
 func solve(data []byte) (int, int) {
-	byteLines := bytes.Split(data, []byte{13, 10})
+	byteLines := aocutils.SplitByteLines(data)
 
 	left := make([]int, len(byteLines))
 	right := make([]int, len(byteLines))
