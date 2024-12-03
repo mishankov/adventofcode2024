@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aoc2024/internal/utils"
+	"aoc2024/pkg/aocutils"
 	"bytes"
 	"log"
 	"strconv"
@@ -34,10 +34,7 @@ func checkSafe(levels [][]byte) bool {
 	dir := 0
 	isSafeStrict := true
 	for _, numberByte := range levels[1:] {
-		number, err := strconv.Atoi(string(numberByte))
-		if err != nil {
-			log.Fatal("Error converting number to string:", err)
-		}
+		number := aocutils.ToInt(numberByte)
 
 		delta := number - previousNumber
 		var currentDir int
@@ -47,7 +44,7 @@ func checkSafe(levels [][]byte) bool {
 			currentDir = 1
 		}
 
-		if !(utils.Abs(delta) >= 1 && utils.Abs(delta) <= 3) {
+		if !(aocutils.Abs(delta) >= 1 && aocutils.Abs(delta) <= 3) {
 			isSafeStrict = false
 			break
 		}
@@ -66,7 +63,7 @@ func checkSafe(levels [][]byte) bool {
 }
 
 func main() {
-	bytesData := utils.GetFileBytes("data/2")
+	bytesData := aocutils.GetFileBytes("data/2")
 	byteLines := bytes.Split(bytesData, []byte{13, 10})
 
 	resultOne := 0

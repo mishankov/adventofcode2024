@@ -1,32 +1,14 @@
 package main
 
 import (
+	"aoc2024/pkg/aocutils"
 	"bytes"
-	"io"
 	"log"
-	"os"
 	"slices"
-	"strconv"
 )
 
-func abs(i int) int {
-	if i < 0 {
-		return -i
-	}
-	return i
-}
-
 func main() {
-	file, err := os.Open("data/1")
-	if err != nil {
-		log.Fatal("Error opening file:", err)
-	}
-
-	bytesData, err := io.ReadAll(file)
-	if err != nil {
-		log.Fatal("Error reading file content:", err)
-	}
-
+	bytesData := aocutils.GetFileBytes("data/1")
 	byteLines := bytes.Split(bytesData, []byte{13, 10})
 
 	left := make([]int, len(byteLines))
@@ -36,15 +18,8 @@ func main() {
 	for index, line := range byteLines {
 		numberBytes := bytes.Split(line, []byte{32, 32, 32})
 
-		left[index], err = strconv.Atoi(string(numberBytes[0]))
-		if err != nil {
-			log.Fatal("Error converting left number:", err)
-		}
-
-		right[index], err = strconv.Atoi(string(numberBytes[1]))
-		if err != nil {
-			log.Fatal("Error converting right number:", err)
-		}
+		left[index] = aocutils.ToInt(numberBytes[0])
+		right[index] = aocutils.ToInt(numberBytes[1])
 
 		rightAmounts[right[index]] += 1
 	}
@@ -55,7 +30,7 @@ func main() {
 	resultOne := 0
 	resultTwo := 0
 	for i := range left {
-		resultOne += abs(left[i] - right[i])
+		resultOne += aocutils.Abs(left[i] - right[i])
 		resultTwo += left[i] * rightAmounts[left[i]]
 	}
 

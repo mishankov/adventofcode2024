@@ -1,15 +1,14 @@
 package main
 
 import (
-	"aoc2024/internal/utils"
+	"aoc2024/pkg/aocutils"
 	"log"
 	"regexp"
-	"strconv"
 	"strings"
 )
 
 func main() {
-	bytesData := utils.GetFileBytes("data/3")
+	bytesData := aocutils.GetFileBytes("data/3")
 	stringData := string(bytesData)
 
 	re := regexp.MustCompile(`mul\(\d+,\d+\)|do\(\)|don't\(\)`)
@@ -25,15 +24,8 @@ func main() {
 			re := regexp.MustCompile(`\d+`)
 			digitMatches := re.FindAllString(match, -1)
 
-			left, err := strconv.Atoi(digitMatches[0])
-			if err != nil {
-				log.Fatal("Error converting left number to string:", err)
-			}
-
-			right, err := strconv.Atoi(digitMatches[1])
-			if err != nil {
-				log.Fatal("Error converting right number to string:", err)
-			}
+			left := aocutils.ToInt(digitMatches[0])
+			right := aocutils.ToInt(digitMatches[1])
 
 			resultOne += left * right
 
