@@ -23,13 +23,7 @@ func GetFileBytes(path string) []byte {
 }
 
 func SplitByteLines(data []byte) [][]byte {
-	lines := bytes.Split(data, []byte{13, 10})
-
-	if len(lines) == 1 {
-		lines = bytes.Split(data, []byte{10})
-	}
-
-	return lines
+	return bytes.Split(bytes.ReplaceAll(data, []byte{13, 10}, []byte{10}), []byte{10})
 }
 
 type absInput interface {
