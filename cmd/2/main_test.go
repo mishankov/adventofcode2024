@@ -13,10 +13,10 @@ func TestSolve(t *testing.T) {
 	resultOne, resultTwo := solve(input)
 
 	if resultOne != expectedOne {
-		t.Fatalf("Result expected to be %q, got %q", resultOne, expectedOne)
+		t.Fatalf("Result expected to be %v, got %v", expectedOne, resultOne)
 	}
 
 	if resultTwo != expectedTwo {
-		t.Fatalf("Result expected to be %q, got %q", resultTwo, expectedTwo)
+		t.Fatalf("Result expected to be %v, got %v", expectedTwo, resultTwo)
 	}
 }

@@ -23,6 +23,6 @@ func TestSolveSecond(t *testing.T) {
 	_, resultTwo := solve(input)
 
 	if resultTwo != expected {
-		t.Fatalf("Result expected to be %v, got %v", resultTwo, expected)
+		t.Fatalf("Result expected to be %v, got %v", expected, resultTwo)
 	}
 }
