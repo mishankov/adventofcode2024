@@ -42,8 +42,8 @@ import (
 
 func TestSolve(t *testing.T) {
 	input := aocutils.GetFileBytes("../../data/%v_test")
-	expectedOne := 41
-	expectedTwo := 6
+	expectedOne := 0
+	expectedTwo := 0
 
 	resultOne, resultTwo := solve(input)
 
