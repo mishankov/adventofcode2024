@@ -8,6 +8,18 @@ import (
 	"strconv"
 )
 
+type Vector struct {
+	X, Y int
+}
+
+type Position struct {
+	X, Y int
+}
+
+func (p Position) VectorFrom(other Position) Vector {
+	return Vector{X: p.X - other.X, Y: p.Y - other.Y}
+}
+
 func GetFileBytes(path string) []byte {
 	file, err := os.Open(path)
 	if err != nil {
