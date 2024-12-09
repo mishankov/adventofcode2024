@@ -50,7 +50,7 @@ func Abs[V absInput](i V) V {
 }
 
 type toIntInput interface {
-	string | []byte
+	string | []byte | byte
 }
 
 func ToInt[V toIntInput](input V) int {
