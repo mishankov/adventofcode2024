@@ -20,6 +20,14 @@ func (p Position) VectorFrom(other Position) Vector {
 	return Vector{X: p.X - other.X, Y: p.Y - other.Y}
 }
 
+func (p Position) Add(vec Vector) Position {
+	return Position{X: p.X + vec.X, Y: p.Y + vec.Y}
+}
+
+func (p Position) IsValid(maxX, maxY int) bool {
+	return p.X >= 0 && p.X <= maxX && p.Y >= 0 && p.Y <= maxY
+}
+
 func GetFileBytes(path string) []byte {
 	file, err := os.Open(path)
 	if err != nil {
