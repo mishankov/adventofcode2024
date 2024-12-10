@@ -77,6 +77,11 @@ func createFiles(day string) {
 func main() {
 	day := os.Args[1]
 
+	if _, err := os.Stat(fmt.Sprintf("cmd/%v/main.go", day)); err == nil {
+		log.Println("Skip")
+		return
+	}
+
 	os.Mkdir(fmt.Sprintf("cmd/%v", day), os.ModePerm)
 
 	createMain(day)
