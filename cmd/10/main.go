@@ -6,9 +6,9 @@ import (
 	"slices"
 )
 
-func highs(current int, pos aocutils.Position, field [][]int) []aocutils.Position {
+func highs(current int, pos aocutils.Position, field [][]int) ([]aocutils.Position, int) {
 	if current == 9 {
-		return []aocutils.Position{pos}
+		return []aocutils.Position{pos}, 1
 	}
 
 	maxY := len(field) - 1
@@ -22,6 +22,7 @@ func highs(current int, pos aocutils.Position, field [][]int) []aocutils.Positio
 	}
 
 	hs := []aocutils.Position{}
+	rat := 0
 	for _, dir := range directions {
 		np := pos.Add(dir)
 
@@ -34,7 +35,8 @@ func highs(current int, pos aocutils.Position, field [][]int) []aocutils.Positio
 			continue
 		}
 
-		nhs := highs(field[np.Y][np.X], np, field)
+		nhs, nr := highs(field[np.Y][np.X], np, field)
+		rat += nr
 
 		for _, nh := range nhs {
 			if !slices.Contains(hs, nh) {
@@ -43,7 +45,7 @@ func highs(current int, pos aocutils.Position, field [][]int) []aocutils.Positio
 		}
 	}
 
-	return hs
+	return hs, rat
 }
 
 func solve(data []byte) (int, int) {
@@ -61,15 +63,18 @@ func solve(data []byte) (int, int) {
 	}
 
 	r1 := 0
+	r2 := 0
 	for y, row := range field {
 		for x, cell := range row {
 			if cell == 0 {
-				r1 += len(highs(cell, aocutils.Position{X: x, Y: y}, field))
+				hs, rat := highs(cell, aocutils.Position{X: x, Y: y}, field)
+				r1 += len(hs)
+				r2 += rat
 			}
 		}
 	}
 
-	return r1, 0
+	return r1, r2
 }
 
 func main() {
