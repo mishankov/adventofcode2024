@@ -8,7 +8,7 @@ import (
 func TestSolve(t *testing.T) {
 	input := aocutils.GetFileBytes("../../data/11_test")
 	expectedOne := 55312
-	expectedTwo := 0
+	expectedTwo := 65601038650482
 
 	resultOne, resultTwo := solve(input)
 

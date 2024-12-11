@@ -4,9 +4,88 @@ import (
 	"aoc2024/pkg/aocutils"
 	"bytes"
 	"log"
-	"slices"
 	"strconv"
 )
+
+type cache struct {
+	data map[int]map[int]int
+	hits int
+}
+
+func (c *cache) set(iteration int, stone int, data int) {
+	_, ok := c.data[iteration]
+	if !ok {
+		c.data[iteration] = map[int]int{}
+	}
+
+	c.data[iteration][stone] = data
+}
+
+func (c *cache) get(iteration int, stone int) (int, bool) {
+	iterationCache := c.data[iteration]
+	if iterationCache != nil {
+		stoneCache, ok := iterationCache[stone]
+		if ok {
+			c.hits++
+			return stoneCache, true
+		}
+	}
+
+	return 0, false
+}
+
+func (c *cache) reset() {
+	c.data = map[int]map[int]int{}
+	c.hits = 0
+}
+
+func (c cache) entriesAmount() int {
+	r := 0
+	for _, stoneCache := range c.data {
+		r += len(stoneCache)
+	}
+
+	return r
+}
+
+var CACHE cache = cache{data: map[int]map[int]int{}, hits: 0}
+
+func processStones(stone int, iteration int, depth int) int {
+	if iteration == depth {
+		return 1
+	}
+
+	iteration++
+
+	c, ok := CACHE.get(iteration, stone)
+	if ok {
+		return c
+	}
+
+	switch {
+	case stone == 0:
+		result := processStones(1, iteration, depth)
+		CACHE.set(iteration, stone, result)
+
+		return result
+	case len(strconv.Itoa(stone))%2 == 0:
+		numberAsString := strconv.Itoa(stone)
+		middleIndex := len(numberAsString) / 2
+
+		left := processStones(aocutils.ToInt(numberAsString[:middleIndex]), iteration, depth)
+		right := processStones(aocutils.ToInt(numberAsString[middleIndex:]), iteration, depth)
+
+		result := left + right
+		CACHE.set(iteration, stone, result)
+
+		return result
+	default:
+		result := processStones(stone*2024, iteration, depth)
+		CACHE.set(iteration, stone, result)
+
+		return result
+	}
+}
 
 func solve(data []byte) (int, int) {
 	splitedData := bytes.Split(data, []byte{32})
@@ -16,33 +95,21 @@ func solve(data []byte) (int, int) {
 		numbers[i] = aocutils.ToInt(d)
 	}
 
-	for range 25 {
-		index := 0
-		for index < len(numbers) {
-			switch {
-			case numbers[index] == 0:
-				numbers[index] = 1
-				index++
-			case len(strconv.Itoa(numbers[index]))%2 == 0:
-				numberAsString := strconv.Itoa(numbers[index])
-				middleIndex := len(numberAsString) / 2
-
-				left := numberAsString[:middleIndex]
-				right := numberAsString[middleIndex:]
-
-				numbers[index] = aocutils.ToInt(left)
-				numbers = slices.Insert(numbers, index+1, aocutils.ToInt(right))
-
-				index++
-				index++
-			default:
-				numbers[index] *= 2024
-				index++
-			}
-		}
+	r1 := 0
+	for _, num := range numbers {
+		r1 += processStones(num, 0, 25)
 	}
+	log.Println("1. Cache hits:", CACHE.hits, "Cache entries:", CACHE.entriesAmount())
 
-	return len(numbers), 0
+	CACHE.reset()
+
+	r2 := 0
+	for _, num := range numbers {
+		r2 += processStones(num, 0, 75)
+	}
+	log.Println("2. Cache hits:", CACHE.hits, "Cache entries:", CACHE.entriesAmount())
+
+	return r1, r2
 }
 
 func main() {
