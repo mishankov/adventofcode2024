@@ -4,7 +4,46 @@ import (
 	"aoc2024/pkg/aocutils"
 	"bytes"
 	"log"
+	"sync"
+	"sync/atomic"
 )
+
+func solveAsync(data []byte) (int, int) {
+	byteLines := aocutils.SplitByteLines(data)
+
+	var wg sync.WaitGroup
+
+	var resultOne atomic.Uint32
+	var resultTwo atomic.Uint32
+	for _, line := range byteLines {
+		numberBytes := bytes.Split(line, []byte{32})
+
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+
+			isSafeStrict := checkSafe(numberBytes)
+
+			if isSafeStrict {
+				resultOne.Add(1)
+				resultTwo.Add(1)
+			} else {
+				variants := generateVariants(numberBytes)
+				for _, variant := range variants {
+					if checkSafe(variant) {
+						resultTwo.Add(1)
+						break
+					}
+				}
+			}
+		}()
+	}
+
+	wg.Wait()
+
+	return int(resultOne.Load()), int(resultTwo.Load())
+}
 
 func solve(data []byte) (int, int) {
 	byteLines := aocutils.SplitByteLines(data)
