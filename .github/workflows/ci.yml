@@ -22,4 +22,4 @@ jobs:
       run: go build -v ./...
 
     - name: Test and benchmarking
-      run: go test -v ./... -bench -cover .
+      run: go test -v ./... -bench . -cover
